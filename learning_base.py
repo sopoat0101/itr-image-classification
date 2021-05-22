@@ -12,6 +12,7 @@ DATA_TEST_FILE_TYPE = os.getenv('DATA_TEST_FILE_TYPE')
 COLOR_FEATURE_VALUE_MAX = int(os.getenv('COLOR_FEATURE_VALUE_MAX'))
 COLOR_BINS = int(os.getenv('COLOR_BINS'))
 MODEL_PATH = os.getenv('MODEL_PATH')
+FEATURE_LABEL_FILE_NAME = os.getenv('FEATURE_LABEL_FILE_NAME')
 MODEL_FILE_NAME = os.getenv('MODEL_FILE_NAME')
 
 
@@ -19,6 +20,11 @@ def main():
     features, labels = featureExtraction()
     gnbModel = GaussianNB().fit(features, labels)
     pickle.dump(gnbModel, open(MODEL_PATH + '/' + MODEL_FILE_NAME, 'wb'))
+    pickle.dump(
+        [features, labels],
+        open(MODEL_PATH+'/'+FEATURE_LABEL_FILE_NAME, 'wb')
+    )
+    print('don')
 
 
 def featureExtraction():
