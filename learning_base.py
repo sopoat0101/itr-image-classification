@@ -1,6 +1,7 @@
 import os
 import cv2 as cv
 import numpy as np
+import pickle
 from dotenv import load_dotenv
 from sklearn.naive_bayes import GaussianNB
 
@@ -11,15 +12,14 @@ DATA_TEST_PATH = os.getenv('DATA_TEST_PATH')
 DATA_TEST_FILE_TYPE = os.getenv('DATA_TEST_FILE_TYPE')
 COLOR_FEATURE_VALUE_MAX = int(os.getenv('COLOR_FEATURE_VALUE_MAX'))
 COLOR_BINS = int(os.getenv('COLOR_BINS'))
+MODEL_PATH = os.getenv('MODEL_PATH')
+MODEL_FILE_NAME = os.getenv('MODEL_FILE_NAME')
 
 
 def main():
     features, labels = featureExtraction()
-    gnb = GaussianNB().fit(features, labels)
-    test = getImageFeature(
-        './dataset/1/1.jpg', createBins(COLOR_BINS, COLOR_FEATURE_VALUE_MAX))
-    out = gnb.predict([test])
-    print('Answer is ' + str(out))
+    gnbModel = GaussianNB().fit(features, labels)
+    pickle.dump(gnbModel, open(MODEL_PATH + '/' + MODEL_FILE_NAME, 'wb'))
 
 
 def featureExtraction():
