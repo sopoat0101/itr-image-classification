@@ -25,7 +25,7 @@ def main():
         testFeatures.append(feature)
         testLabels.append(testObj["label"])
     result = gnbModel.score(testFeatures, testLabels)
-    print("Scroe: %.02f%%" % (result*100))
+    print("Score: %.02f%%" % (result*100))
     out = gnbModel.predict(testFeatures)
     print("Answer:")
     print(out)
