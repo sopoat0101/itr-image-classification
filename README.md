@@ -6,12 +6,12 @@
 
 ## Group Members
 
-| First Name | Last Name    | ID       |
-| ---------- | ------------ | -------- |
-| Satawat    | Thitisupakul | 60070093 |
-| Sopoat     | Iamcharoen   | 60070101 |
-| Nichapat   | Kachacheewa  | 61070059 |
-| Wipawapat  | Hongsing     | 61070208 |
+| No. | First Name | Last Name    | ID       |     |
+| --- | ---------- | ------------ | -------- | --- |
+| 1   | Satawat    | Thitisupakul | 60070093 | IT  |
+| 2   | Sopoat     | Iamcharoen   | 60070101 | IT  |
+| 3   | Nichapat   | Kachacheewa  | 61070059 | IT  |
+| 4   | Wipawapat  | Hongsing     | 61070208 | IT  |
 
 ## Installation
 
@@ -79,3 +79,7 @@ pip install opencv-python
 - Keep model in [model](./model) file name [train_learning_based.sav](./model/train_learning_based.sav)
 
 - Keep features and lables in [model](./model) file name [train_handcraft_based.sav](./model/train_handcraft_based.sav)
+
+### Configuration
+
+- You can change config in [.env](./.env) file such as dataset directory, file name for save model.
