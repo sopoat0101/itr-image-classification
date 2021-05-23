@@ -30,6 +30,8 @@ def main():
     print("Score: %.02f%%" % (result*100))
     print("Answer:")
     print(out)
+    print("True:")
+    print(testLabels)
 
 
 main()

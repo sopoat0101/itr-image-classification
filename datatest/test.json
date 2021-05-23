@@ -3,7 +3,9 @@
         {"imagePath":"./dataset/1/4.jpg","label":"1"},
         {"imagePath":"./dataset/4/34.jpg","label":"4"},
         {"imagePath":"./dataset/6/53.jpg","label":"6"},
-        {"imagePath":"./dataset/8/76.jpg","label":"8"},
+        {"imagePath":"./dataset/10/93.jpg","label":"10"},
+        {"imagePath":"./datatest/11-103.png","label":"11"},
+        {"imagePath":"./datatest/11-103-filter.jpg","label":"11"},
         {"imagePath":"./datatest/8-73-filter.jpg","label":"8"}
     ]
 }

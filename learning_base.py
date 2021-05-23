@@ -40,6 +40,7 @@ def featureExtraction():
                     GetImageFeature.getImageFeature(fullPath, colorBins)
                 )
                 labels.append(lable)
+        print(PATH)
     return [features, labels]
 
 
