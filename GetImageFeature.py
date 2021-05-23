@@ -18,7 +18,7 @@ def getImageTexture(image):
 
 
 def getImageColor(image, colorBins):
-    blur = cv.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
+    blur = cv.fastNlMeansDenoisingColored(image, None, 3, 3, 7, 21)
     h, _, _ = cv.split(cv.cvtColor(blur, cv.COLOR_BGR2HSV))
     hue = np.array(h).flatten()
     counts, _ = np.histogram(hue, colorBins)
@@ -31,8 +31,8 @@ def _imageFilter(grayImage):
 
     _, thresh1 = cv.threshold(blur, 135, 255, cv.THRESH_BINARY)
 
-    filtY = np.array([[-1, 0, 1], [-1, 0, -1], [-1, 0, 1]])
-    filtX = np.array([[1, 1, 1], [0, 0, 0], [-1, -1, -1]])
+    filtY = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
+    filtX = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
     outX = cv.filter2D(thresh1, -1, filtX, borderType=0)/255
     outY = cv.filter2D(thresh1, -1, filtY, borderType=0)/255
     out = np.sqrt((outX**2)+(outY**2))
