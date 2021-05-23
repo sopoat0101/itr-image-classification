@@ -25,8 +25,6 @@
 - numpy
 - openCV
 
-### Getting Started
-
 `pip install pickle-mixin`
 
 `pip install -U scikit-learn`
@@ -36,3 +34,32 @@
 `pip install numpy`
 
 `pip install opencv-python`
+
+### Getting Started
+
+1. run python file [learning_base.py](./learning_base.py)
+2. run python file [handcraft_base.py](./handcraft_base.py)
+
+### Change Dataset
+
+- in [dataset](./dataset) folder have class folder.
+
+```example
+|example
+├── dataset
+│  └── 1 # Class Name
+│      └── Image.jpg # Image file
+│      └── ...
+```
+
+- in [datatest](./datatest) folder have json [test.json](./datatest/test.json) file.
+
+```example
+{
+    "data":[
+       {"imagePath":"./dataset/1/4.jpg","label":"1"},
+       {"imagePath":"./dataset/1/4.jpg","label":"1"},
+       ...
+    ]
+}
+```
