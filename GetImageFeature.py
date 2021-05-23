@@ -4,21 +4,29 @@ import numpy as np
 
 def getImageFeature(imagePath, colorBins):
     img = cv.resize(cv.imread(imagePath), (255, 255))
-    blur = cv.fastNlMeansDenoisingColored(img, None, 10, 10, 7, 21)
-    h, _, _ = cv.split(cv.cvtColor(blur, cv.COLOR_BGR2HSV))
-    hue = np.array(h).flatten()
-    grayImage = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    filterImage = imageFilter(grayImage)
-    hog = np.array(getHOGData(filterImage)).flatten()
-    # cv.imshow('img', h)
-    # cv.waitKey(0)
-    counts, _ = np.histogram(hue, colorBins)
-    nCounts = normalize(counts, 0, 1)
-    feature = np.concatenate((nCounts, hog), axis=None)
+    hog = getImageTexture(img)
+    hisColor = getImageColor(img, colorBins)
+    feature = np.concatenate((hisColor, hog), axis=None)
     return feature
 
 
-def imageFilter(grayImage):
+def getImageTexture(image):
+    grayImage = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+    filterImage = _imageFilter(grayImage)
+    hog = np.array(_getHOGData(filterImage)).flatten()
+    return hog
+
+
+def getImageColor(image, colorBins):
+    blur = cv.fastNlMeansDenoisingColored(image, None, 10, 10, 7, 21)
+    h, _, _ = cv.split(cv.cvtColor(blur, cv.COLOR_BGR2HSV))
+    hue = np.array(h).flatten()
+    counts, _ = np.histogram(hue, colorBins)
+    nCounts = _normalize(counts, 0, 1)
+    return nCounts
+
+
+def _imageFilter(grayImage):
     blur = cv.GaussianBlur(grayImage, (5, 5), 0)
 
     _, thresh1 = cv.threshold(blur, 135, 255, cv.THRESH_BINARY)
@@ -35,7 +43,7 @@ def imageFilter(grayImage):
     return outC
 
 
-def getHOGData(image):
+def _getHOGData(image):
     cv_img = image.astype(np.uint8)
     winSize = (64, 64)
     blockSize = (16, 16)
@@ -68,7 +76,7 @@ def getHOGData(image):
     return hist
 
 
-def normalize(arr, t_min, t_max):
+def _normalize(arr, t_min, t_max):
     norm_arr = []
     diff = t_max - t_min
     diff_arr = max(arr) - min(arr)

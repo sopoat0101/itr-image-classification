@@ -2,6 +2,7 @@ import os
 import json
 import pickle
 from dotenv import load_dotenv
+import numpy as np
 from sklearn.metrics import accuracy_score
 import GetImageFeature
 
@@ -27,11 +28,11 @@ def main():
         testLabels.append(testObj["label"])
     out = gnbModel.predict(testFeatures)
     result = accuracy_score(testLabels, out)
-    print("Score: %.02f%%" % (result*100))
+    print("Accuracy: %.02f%%" % (result*100))
     print("Answer:")
     print(out)
-    print("True:")
-    print(testLabels)
+    print("Correct:")
+    print(np.array(testLabels))
 
 
 main()
