@@ -25,15 +25,15 @@
 - numpy
 - openCV
 
-`pip install pickle-mixin`
+```pip install pickle-mixin```
 
-`pip install -U scikit-learn`
+```pip install -U scikit-learn```
 
-`pip install python-dotenv`
+```pip install python-dotenv```
 
-`pip install numpy`
+```pip install numpy```
 
-`pip install opencv-python`
+```pip install opencv-python```
 
 ## Getting Started
 
