@@ -4,7 +4,7 @@
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เดี๋ยวมันก็ผ่านพ้น
 
-## Group members
+## Group Members
 
 | First Name | Last Name    | ID       |
 | ---------- | ------------ | -------- |
