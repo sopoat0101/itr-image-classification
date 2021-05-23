@@ -63,3 +63,9 @@
     ]
 }
 ```
+
+### Model
+
+- Keep model in [model](./model) file name [train_learning_based.sav](./model/train_learning_based.sav)
+
+- Keep features and lables in [model](./model) file name [train_handcraft_based.sav](./model/train_handcraft_based.sav)
