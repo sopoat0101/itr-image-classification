@@ -24,7 +24,7 @@ def main():
         [features, labels],
         open(MODEL_PATH+'/'+FEATURE_LABEL_FILE_NAME, 'wb')
     )
-    print('don')
+    print('done')
 
 
 def featureExtraction():

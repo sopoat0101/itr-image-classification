@@ -1,5 +1,20 @@
 import cv2 as cv
 import numpy as np
+from PyEMD.EMD2d import EMD2D
+
+
+def testBEMD():
+    img = cv.imread('./datatest/lena.png')
+    g_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+    emd2d = EMD2D()
+    IMFs_2D = emd2d(g_img)
+    print(len(IMFs_2D))
+    cv.imshow('IMF0', IMFs_2D[0])
+    cv.imshow('IMF1', IMFs_2D[1])
+    cv.waitKey(0)
+
+
+# testBEMD()
 
 
 def getImageFeature(imagePath, colorBins):
@@ -58,6 +73,6 @@ def normalize(arr, t_min, t_max):
 
 def createBins(bins, max):
     myBins = []
-    for i in range(1, bins+1):
-        myBins.append((i * (max//bins))-1)
+    for i in range(0, bins+1):
+        myBins.append((i * (max//bins)))
     return myBins
