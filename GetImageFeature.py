@@ -1,20 +1,36 @@
 import cv2 as cv
 import numpy as np
-from PyEMD.EMD2d import EMD2D
+import PyEMD.BEMD as pe
+import matplotlib.pyplot as plt
 
 
-def testBEMD():
-    img = cv.imread('./datatest/lena.png')
-    g_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    emd2d = EMD2D()
-    IMFs_2D = emd2d(g_img)
-    print(len(IMFs_2D))
-    cv.imshow('IMF0', IMFs_2D[0])
-    cv.imshow('IMF1', IMFs_2D[1])
+def testFilter():
+    img = cv.cvtColor(
+        cv.imread('./datatest/8-73-filter.jpg'), cv.COLOR_BGR2GRAY)
+    # img = cv.cvtColor(
+    #     cv.imread('./dataset/8/73.jpg'), cv.COLOR_BGR2GRAY)
+
+    ret, thresh1 = cv.threshold(img, 127, 255, cv.THRESH_BINARY)
+
+    # filtY = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
+    # filtX = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
+    # outX = cv.filter2D(thresh1, -1, filtX, borderType=0)/255
+    # outY = cv.filter2D(thresh1, -1, filtY, borderType=0)/255
+    # out = np.sqrt((outX**2)+(outY**2))
+
+    # gaus = cv.getGaussianKernel(9, 3)
+    # gauFilter = np.multiply(gaus.T, gaus)
+    # outGau = cv.filter2D(out, -1, gauFilter, borderType=0)
+
+    filt3 = np.ones((3, 3))
+    outO = cv.morphologyEx(ret, cv.MORPH_OPEN, filt3)
+    outC = cv.morphologyEx(outO, cv.MORPH_CLOSE, filt3)
+
+    cv.imshow('img', thresh1)
     cv.waitKey(0)
 
 
-# testBEMD()
+testFilter()
 
 
 def getImageFeature(imagePath, colorBins):
