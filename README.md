@@ -35,7 +35,7 @@
 
 `pip install opencv-python`
 
-### Getting Started
+## Getting Started
 
 1. run python file [learning_base.py](./learning_base.py)
 2. run python file [handcraft_base.py](./handcraft_base.py)
