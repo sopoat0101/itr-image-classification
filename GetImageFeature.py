@@ -18,25 +18,30 @@ def getImageTexture(image):
 
 
 def getImageColor(image, colorBins):
+    # Denoising image by Non-Local Means filter
     blur = cv.fastNlMeansDenoisingColored(image, None, 3, 3, 7, 21)
+    # Select hue from image.
     h, _, _ = cv.split(cv.cvtColor(blur, cv.COLOR_BGR2HSV))
+    # Change h data to 1d array.
     hue = np.array(h).flatten()
+    # Create counting array of hue value.
     counts, _ = np.histogram(hue, colorBins)
     nCounts = _normalize(counts, 0, 1)
     return nCounts
 
 
 def _imageFilter(grayImage):
+    # Gaussian filter.
     blur = cv.GaussianBlur(grayImage, (5, 5), 0)
-
+    # Change image to binary.
     _, thresh1 = cv.threshold(blur, 135, 255, cv.THRESH_BINARY)
-
+    # Sobel filter for texture.
     filtY = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]])
     filtX = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]])
     outX = cv.filter2D(thresh1, -1, filtX, borderType=0)/255
     outY = cv.filter2D(thresh1, -1, filtY, borderType=0)/255
     out = np.sqrt((outX**2)+(outY**2))
-
+    # Closing filter.
     filt = np.ones((5, 5))
     outC = cv.morphologyEx(out, cv.MORPH_CLOSE, filt)
 
@@ -45,6 +50,7 @@ def _imageFilter(grayImage):
 
 def _getHOGData(image):
     cv_img = image.astype(np.uint8)
+    # Setting HOG params.
     winSize = (64, 64)
     blockSize = (16, 16)
     blockStride = (8, 8)

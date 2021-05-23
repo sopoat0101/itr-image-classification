@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 import GetImageFeature
 
+# Load data from .env file.
 load_dotenv()
 MODEL_PATH = os.getenv('MODEL_PATH')
 MODEL_FILE_NAME = os.getenv('MODEL_FILE_NAME')
@@ -15,10 +16,13 @@ COLOR_BINS = int(os.getenv('COLOR_BINS'))
 
 
 def main():
+    # Load model
     gnbModel = pickle.load((open(MODEL_PATH+'/'+MODEL_FILE_NAME, 'rb')))
+    # Load test json data.
     testData = json.load(open(TEST_FILE_PATH))
     testFeatures = []
     testLabels = []
+    # Set features and labels from json data.
     for testObj in testData["data"]:
         feature = GetImageFeature.getImageFeature(
             testObj["imagePath"],
@@ -27,7 +31,9 @@ def main():
         testFeatures.append(feature)
         testLabels.append(testObj["label"])
     out = gnbModel.predict(testFeatures)
+    # Calcurated accuracy.
     result = accuracy_score(testLabels, out)
+    # Print result.
     print("Accuracy: %.02f%%" % (result*100))
     print("Answer:")
     print(out)
