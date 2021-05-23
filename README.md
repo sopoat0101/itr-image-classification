@@ -25,15 +25,25 @@
 - numpy
 - openCV
 
-```pip install pickle-mixin```
+```install pickle
+pip install pickle-mixin
+```
 
-```pip install -U scikit-learn```
+```install sklearm
+pip install -U scikit-learn
+```
 
-```pip install python-dotenv```
+```install dotenv
+pip install python-dotenv
+```
 
-```pip install numpy```
+```install numpy
+pip install numpy
+```
 
-```pip install opencv-python```
+```install opencv
+pip install opencv-python
+```
 
 ## Getting Started
 
