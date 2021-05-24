@@ -1,44 +1,71 @@
 import os
-import json
 import pickle
 from dotenv import load_dotenv
 import numpy as np
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 import GetImageFeature
 
 # Load data from .env file.
 load_dotenv()
-MODEL_PATH = os.getenv('MODEL_PATH')
-MODEL_FILE_NAME = os.getenv('MODEL_FILE_NAME')
-TEST_FILE_PATH = os.getenv('TEST_FILE_PATH')
+DATA_SET_PATH = os.getenv('DATA_SET_PATH')
+DATA_SET_FILE_TYPE = os.getenv('DATA_SET_FILE_TYPE')
+DATA_TEST_PATH = os.getenv('DATA_TEST_PATH')
+DATA_TEST_FILE_TYPE = os.getenv('DATA_TEST_FILE_TYPE')
 COLOR_FEATURE_VALUE_MAX = int(os.getenv('COLOR_FEATURE_VALUE_MAX'))
 COLOR_BINS = int(os.getenv('COLOR_BINS'))
+MODEL_PATH = os.getenv('MODEL_PATH')
+HAND_CRAFT_OUTPUT_FILE_NAME = os.getenv('HAND_CRAFT_OUTPUT_FILE_NAME')
+MODEL_FILE_NAME = os.getenv('MODEL_FILE_NAME')
 
 
-def main():
+def handCraft():
+    # Extract image feature from dataset.
+    features, labels, _ = featureExtraction(DATA_SET_PATH, DATA_SET_FILE_TYPE)
+    #   Create Gaussian Naive Bayes.
+    gnbModel = GaussianNB().fit(features, labels)
+    #   Save model file.
+    pickle.dump(gnbModel, open(MODEL_PATH + '/hancraft_model.sav', 'wb'))
+    #   Save features and labels file.
+    pickle.dump([features, labels], open(
+        MODEL_PATH + '/' + HAND_CRAFT_OUTPUT_FILE_NAME, 'wb'))
+    print('Learn Done!')
+
+
+def test():
     # Load model
-    gnbModel = pickle.load((open(MODEL_PATH+'/'+MODEL_FILE_NAME, 'rb')))
-    # Load test json data.
-    testData = json.load(open(TEST_FILE_PATH))
+    gnbModel = pickle.load((open(MODEL_PATH + '/hancraft_model.sav', 'rb')))
     testFeatures = []
     testLabels = []
-    # Set features and labels from json data.
-    for testObj in testData["data"]:
-        feature = GetImageFeature.getImageFeature(
-            testObj["imagePath"],
-            GetImageFeature.createBins(COLOR_BINS, COLOR_FEATURE_VALUE_MAX)
-        )
-        testFeatures.append(feature)
-        testLabels.append(testObj["label"])
+    testFeatures, testLabels, fileName = featureExtraction(
+        DATA_TEST_PATH, DATA_TEST_FILE_TYPE
+    )
     out = gnbModel.predict(testFeatures)
+    testLabels = np.array(testLabels)
     # Calcurated accuracy.
     result = accuracy_score(testLabels, out)
     # Print result.
+    for i in range(len(out)):
+        print('Predict: %s\t, Answer: %s\t, Result: %s\t, File Name: %s\t' %
+              (out[i], testLabels[i], out[i] in testLabels[i], fileName[i]))
     print("Accuracy: %.02f%%" % (result*100))
-    print("Answer:")
-    print(out)
-    print("Correct:")
-    print(np.array(testLabels))
 
 
-main()
+def featureExtraction(dataPath, fileType):
+    features = []
+    labels = []
+    fileName = []
+    colorBins = GetImageFeature.createBins(COLOR_BINS, COLOR_FEATURE_VALUE_MAX)
+    # Search file in dataset.
+    for PATH, _, _ in os.walk(dataPath):
+        for filePath in os.listdir(PATH):
+            if os.path.isfile(os.path.join(PATH, filePath)) and fileType in filePath:
+                fullPath = '%s/%s' % (PATH, filePath)
+                lable = PATH.split('/')[-1]
+                features.append(
+                    GetImageFeature.getImageFeature(fullPath, colorBins)
+                )
+                labels.append(lable)
+                fileName.append(fullPath)
+        print(PATH)
+    return [features, labels, fileName]
