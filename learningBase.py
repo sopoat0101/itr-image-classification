@@ -31,43 +31,42 @@ for PATH, _, _ in os.walk(DATA_SET_PATH):
             lable = PATH.split('/')[-1]
             img = imread(fullPath)
             img = cv.resize(img, (64, 64))
-
-            # normalizing the pixel values
-            # img /= 255.0
-            # converting the type of pixel to float
-            # img = img.astype('float32')
-            # appending the image into the list
             features.append(
                 img
             )
             labels.append(int(lable))
 
-train_x, test_x, train_y, test_y = train_test_split(
-    features, labels, test_size=0.25)
+# train_x, test_x, train_y, test_y = train_test_split(
+#     features, labels, test_size=0.25)
 
-train_x = np.array(train_x)
-test_x = np.array(test_x)
-train_y = np.array(train_y)
-test_y = np.array(test_y)
+# train_x = np.array(train_x)
+# test_x = np.array(test_x)
+# train_y = np.array(train_y)
+# test_y = np.array(test_y)
+
+train_x = np.array(features)
+train_y = np.array(labels)
 
 # images are greyscale, they have 1 channel
 # add dim to (n_samples, height, width, channels)
 train_y = tf.expand_dims(train_y, axis=-1)
-test_y = tf.expand_dims(test_y, axis=-1)
+# test_y = tf.expand_dims(test_y, axis=-1)
+
 print(train_x.shape)
-print(test_x.shape)
-print(train_y.shape)
-print(test_y.shape)
+# print(test_x.shape)
+# print(train_y)
+# print(test_y.shape)
 
 cnn = models.Sequential([
-    layers.Conv2D(filters=64, kernel_size=(3, 3),
+    layers.Conv2D(filters=32, kernel_size=(3, 3),
                   activation='relu', input_shape=(64, 64, 3)),
     layers.MaxPooling2D((2, 2)),
 
-    layers.Conv2D(filters=128, kernel_size=(3, 3), activation='relu'),
+    layers.Conv2D(filters=64, kernel_size=(3, 3), activation='relu'),
     layers.MaxPooling2D((2, 2)),
 
     layers.Flatten(),
+    layers.Dense(64, activation='relu'),
     layers.Dense(128, activation='relu'),
     layers.Dense(13, activation='softmax')
 ])
@@ -80,4 +79,28 @@ cnn.fit(train_x, train_y, epochs=12)
 
 print('-----')
 print('test')
+
+featuresTest = []
+labelsTest = []
+
+# get data
+for PATH, _, _ in os.walk('./testData'):
+    for filePath in os.listdir(PATH):
+        if os.path.isfile(os.path.join(PATH, filePath)) and DATA_SET_FILE_TYPE in filePath:
+            fullPath = '%s/%s' % (PATH, filePath)
+            lable = PATH.split('/')[-1]
+            img = imread(fullPath)
+            img = cv.resize(img, (64, 64))
+            featuresTest.append(
+                img
+            )
+            labelsTest.append(int(lable))
+
+test_x = np.array(featuresTest)
+test_y = np.array(labelsTest)
+test_y = tf.expand_dims(test_y, axis=-1)
+
+print(test_x.shape)
+print(test_y.shape)
+
 cnn.evaluate(test_x, test_y)
