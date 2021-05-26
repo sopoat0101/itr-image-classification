@@ -79,7 +79,7 @@ pip install --upgrade tensorflow
 
 ```example
 |example
-├── dataset
+├── datatest
 │  └── 0 # Class Name
 │      └── Image.jpg # Image file
 │      └── ...
