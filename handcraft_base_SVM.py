@@ -3,8 +3,7 @@ import pickle
 from dotenv import load_dotenv
 import numpy as np
 from sklearn import metrics
-from sklearn.metrics import f1_score
-from sklearn.naive_bayes import GaussianNB
+from sklearn import svm
 from sklearn.metrics import accuracy_score
 import GetImageFeature
 
@@ -25,24 +24,25 @@ def handCraft():
     # Extract image feature from dataset.
     features, labels, _ = featureExtraction(DATA_SET_PATH, DATA_SET_FILE_TYPE)
     #   Create Gaussian Naive Bayes.
-    gnbModel = GaussianNB().fit(features, labels)
+    svmModel = svm.SVC().fit(features, labels)
     #   Save model file.
-    pickle.dump(gnbModel, open(MODEL_PATH + '/hancraft_model.sav', 'wb'))
+    pickle.dump(svmModel, open(MODEL_PATH + '/hancraft_model_SVM.sav', 'wb'))
     #   Save features and labels file.
     pickle.dump([features, labels], open(
-        MODEL_PATH + '/' + HAND_CRAFT_OUTPUT_FILE_NAME, 'wb'))
+        MODEL_PATH + '/SVM_' + HAND_CRAFT_OUTPUT_FILE_NAME, 'wb'))
     print('Learn Done!')
 
 
 def test():
     # Load model
-    gnbModel = pickle.load((open(MODEL_PATH + '/hancraft_model.sav', 'rb')))
+    svmModel = pickle.load(
+        (open(MODEL_PATH + '/hancraft_model_SVM.sav', 'rb')))
     testFeatures = []
     testLabels = []
     testFeatures, testLabels, fileName = featureExtraction(
         DATA_TEST_PATH, DATA_TEST_FILE_TYPE
     )
-    out = gnbModel.predict(testFeatures)
+    out = svmModel.predict(testFeatures)
     testLabels = np.array(testLabels)
     # Calcurated accuracy.
     result = accuracy_score(testLabels, out)
@@ -72,3 +72,7 @@ def featureExtraction(dataPath, fileType):
                 fileName.append(fullPath)
         print(PATH)
     return [features, labels, fileName]
+
+
+handCraft()
+test()
