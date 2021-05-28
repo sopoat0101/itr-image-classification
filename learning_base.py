@@ -21,16 +21,29 @@ def train():
 
     cnn = models.Sequential([
         # Feature Ex
-        layers.Conv2D(filters=32, kernel_size=(3, 3),
+        # ReLU replace negative value to zero
+
+        # pattern detection
+        layers.Conv2D(filters=32, kernel_size=(3, 3),  # output feature map
                       activation='relu', input_shape=(64, 64, 3)),
+        # maximum number 2*2 filter for reduce feature map
         layers.MaxPooling2D((2, 2)),
 
+        # component detection
         layers.Conv2D(filters=64, kernel_size=(3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
+
+
         # Classification
+
+        # convert 2D to 1D array
         layers.Flatten(),
+
+        # fully connected
         layers.Dense(128, activation='relu'),
         layers.Dense(64, activation='relu'),
+
+        # probability ranking
         layers.Dense(12, activation='softmax')
     ])
 
